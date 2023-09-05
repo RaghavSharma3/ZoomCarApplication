@@ -34,7 +34,7 @@ public class User implements UserDetails {
 	@Column(
 			name = "user_id"
 	)
-	private Long userID;
+	private Integer userID;
 
 	@Column(
 			name = "username",
@@ -68,6 +68,11 @@ public class User implements UserDetails {
 	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Booking> bookings = new ArrayList<>();
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Car> cars = new ArrayList<>();
+
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

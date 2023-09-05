@@ -1,18 +1,16 @@
 package com.ZoomCar.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
-import java.time.Year;
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Car {
@@ -24,18 +22,21 @@ public class Car {
 	
 	private String name;
 	private String model;
-	private Year year;
+	private Integer year;
 	
 	@Column(name = "transmission_type")
-	private TransmissionType transmissionType;
+	private String transmissionType;
 	
 	@Column(name = "fuel_type")
-	private FuelType fuelType;
+	private String fuelType;
 	
 	@Column(name = "distance_travelled")
 	private Double distanceTravelled;
+	@Enumerated(EnumType.STRING)
 	private CarStatus status;
-	
+
+	@Column(name="price_perHour")
+	private Integer pricePerHour;
 	@Column(name = "no_of_seats")
 	private Integer noOfSeats;
 	
@@ -44,8 +45,11 @@ public class Car {
 	
 	@Column(name = "end_time")
 	private LocalDateTime endDateTime;
-	
+	@JsonIgnore
 	@OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
 	private List<Booking> bookings;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	private User user;
 
 }

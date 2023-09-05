@@ -1,5 +1,6 @@
 package com.ZoomCar.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,8 +25,9 @@ public class Booking {
 	private LocalDateTime bookingTime;
 	
 	private Integer price;
+	@Enumerated(EnumType.STRING)
 	private BookingStatus status;
-	
+	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "car_id")
 	private Car car;
