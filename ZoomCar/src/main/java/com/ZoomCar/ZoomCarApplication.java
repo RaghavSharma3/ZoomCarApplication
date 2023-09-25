@@ -36,5 +36,4 @@ public class ZoomCarApplication implements CommandLineRunner {
 			userRepository.save(user);
 		}
 	}
-
 }

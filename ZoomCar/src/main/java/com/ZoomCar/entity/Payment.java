@@ -1,14 +1,13 @@
 package com.ZoomCar.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Payment {
@@ -21,6 +20,7 @@ public class Payment {
 	
 	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "booking_id")
+	@JsonIgnore
 	private Booking bookingId;
 
 }

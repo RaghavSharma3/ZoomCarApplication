@@ -1,9 +1,9 @@
 package com.ZoomCar.repository;
 
-import com.ZoomCar.entity.Booking;
+import com.ZoomCar.entity.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BookingRepository extends JpaRepository<Booking,Integer> {
+public interface PaymentRepository extends JpaRepository<Payment,Integer> {
 }

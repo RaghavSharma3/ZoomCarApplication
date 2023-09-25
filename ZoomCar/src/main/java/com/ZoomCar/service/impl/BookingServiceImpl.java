@@ -1,15 +1,13 @@
 package com.ZoomCar.service.impl;
 
 import com.ZoomCar.entity.*;
-import com.ZoomCar.repository.BookingRepository;
-import com.ZoomCar.repository.CarRepository;
-import com.ZoomCar.repository.UserRepository;
+import com.ZoomCar.payload.BookingCarPayload;
+import com.ZoomCar.payload.ConfirmBookingPayload;
+import com.ZoomCar.repository.*;
 import com.ZoomCar.service.BookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,108 +16,76 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
 
-	private final BookingRepository bookingRepository;
 	private final CarRepository carRepository;
 	private final UserRepository userRepository;
-
-
-	@Override
-	public String bookCar(Integer carId, Integer userId, String startTime, String endTime) {
-		// Check if the car and user exist in the database
-		Optional<Car> optionalCar = carRepository.findById(carId);
-		Optional<User> optionalUser = userRepository.findById(userId);
-
-		if (optionalCar.isPresent() && optionalUser.isPresent()&&optionalUser.get().getRole()==Role.ROLE_USER) {
-			Car car = optionalCar.get();
-			User user = optionalUser.get();
-
-			if (user.getIsBlocked().equals("No")) {
-				// Check if the car is available for booking
-				if (car.getStatus() == CarStatus.Available) {
-					// Create a new Booking object
-					Booking booking = new Booking();
-					booking.setCar(car);
-					booking.setUser(user);
-					booking.setBookingTime(LocalDateTime.now());
-					booking.setPrice(calculatePriceForBooking(LocalDateTime.parse(startTime), LocalDateTime.parse(endTime), car));
-					booking.setStatus(BookingStatus.Confirmed);
-
-					booking = bookingRepository.save(booking);
-
-					car.setStatus(CarStatus.Unavailable);
-					carRepository.save(car);
-
-					return "Booking Done Successfully";
-				} else {
-					// Car is not available for booking
-					return("The selected car is not available for booking.");
-				}
-			}
-			else {
-				return "User is Blocked, contact Admin!";
-			}
-		} else {
-			// Car or user not found in the database
-			return("Car or user not found.");
-		}
-	}
-	private Integer calculatePriceForBooking(LocalDateTime startTime, LocalDateTime endTime, Car car) {
-
-		double pricePerMinute = car.getPricePerHour()/60;
-
-		// Calculate the duration in minutes
-		long minutes = Duration.between(startTime, endTime).toMinutes();
-
-		// Calculate the total price
-		double totalPrice = minutes * pricePerMinute;
-
-		return (int) totalPrice;
-	}
+	private final BookingRepository bookingRepository;
+	private final PaymentRepository paymentRepository;
 
 	@Override
-	public String cancelBooking(Integer bookingId) {
-		// Use the bookingRepository to fetch the booking by its ID
-		Optional<Booking> optionalBooking = bookingRepository.findById(bookingId);
-
-		if (optionalBooking.isPresent()) {
-			Booking booking = optionalBooking.get();
-
-			// Check if the booking is in a cancellable state
-			if (booking.getStatus() != BookingStatus.Cancelled) {
-
-				booking.setStatus(BookingStatus.Cancelled);
-
-				Car car = booking.getCar();
-				car.setStatus(CarStatus.Available);
-
-				// Optionally, handle refund logic if necessary
-				// For example, you can refund the payment to the user if applicable
-
-				carRepository.save(car);
-				bookingRepository.save(booking);
-
-				return "Booking Cancelled Successfully";
-			} else {
-
-				return ("Booking is already canceled with ID: " + bookingId);
-			}
-		} else {
-
-			return ("Booking not found with ID: " + bookingId);
-		}
-	}
-
-	@Override
-	public List<Booking> listBookings() {
-		// fetch a list of bookings from the database
-		List<Booking>bookings=new ArrayList<>();
-		for(int i=0;i<bookingRepository.findAll().size();i++)
+	public Booking bookingCar(BookingCarPayload bookingCarPayload)
+	{
+		String name= bookingCarPayload.getCarId().getName();
+		String address= bookingCarPayload.getCarId().getAddress();
+		String ratings= bookingCarPayload.getCarId().getRatings();
+		String transmission= bookingCarPayload.getCarId().getTransmission();
+		String fuel= bookingCarPayload.getCarId().getFuel();
+		String userId= bookingCarPayload.getCarId().getUserId();
+		Car car= carRepository.findByNameAndAddressAndRatingsAndTransmissionAndFuel(name,address,ratings,transmission,fuel);
+		if(car!=null)
 		{
-			if(bookingRepository.findAll().get(i).getStatus()==BookingStatus.Confirmed) {
-				bookings.add(bookingRepository.findAll().get(i));
+			Booking booking= Booking.builder()
+					.carId(car)
+					.status(BookingStatus.Pending)
+					.userId(userId)
+					.build();
+			bookingRepository.save(booking);
+			return booking;
+		}
+		return null;
+	}
+	@Override
+	public Booking bookingCancellation(Integer bookingId)
+	{
+		Optional<Booking> booking= bookingRepository.findById(bookingId);
+		if(booking.isPresent())
+		{
+			booking.get().setStatus(BookingStatus.Cancelled);
+			Car car=booking.get().getCarId();
+			car.setStatus(CarStatus.Available);
+			carRepository.save(car);
+			return bookingRepository.save(booking.get());
+		}
+		return null;
+	}
+	@Override
+	public List<Booking> getBookings(String userId)
+	{
+		List<Booking>bookings=new ArrayList<>();
+		List<Booking>allBookings= bookingRepository.findAll();
+		for(int i=0;i<allBookings.size();i++)
+		{
+			if(allBookings.get(i).getStatus()==BookingStatus.Confirmed&& allBookings.get(i).getUserId().equals(userId)) {
+				bookings.add(allBookings.get(i));
 			}
 		}
 		return bookings;
 	}
-
+	@Override
+	public Payment confirmBooking(ConfirmBookingPayload confirmBookingPayload)
+	{
+		Optional<Booking>booking= bookingRepository.findById(confirmBookingPayload.getBookingId());
+		if(booking.isPresent())
+		{
+			booking.get().setStatus(BookingStatus.Confirmed);
+			bookingRepository.save(booking.get());
+			Payment payment= Payment.builder()
+					.amount(confirmBookingPayload.getAmount())
+					.bookingId(booking.get())
+					.build();
+			booking.get().getCarId().setStatus(CarStatus.Unavailable);
+			carRepository.save(booking.get().getCarId());
+			return paymentRepository.save(payment);
+		}
+		return null;
+	}
 }

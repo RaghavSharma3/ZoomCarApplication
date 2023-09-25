@@ -14,42 +14,51 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Car {
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "car_id")
-	private Integer carId;
-	
+	@Column(name = "_id")
+	private Integer id;
+
+	private String image;
 	private String name;
-	private String model;
-	private Integer year;
-	
-	@Column(name = "transmission_type")
-	private String transmissionType;
-	
-	@Column(name = "fuel_type")
-	private String fuelType;
-	
-	@Column(name = "distance_travelled")
-	private Double distanceTravelled;
+
+	@Column(name = "transmission")
+	private String transmission;
+
+	@Column(name = "fuel")
+	private String fuel;
+
+	private String ratings;
+	private String address;
+
+	@Column(name = "kms")
+	private Double kms;
+
 	@Enumerated(EnumType.STRING)
 	private CarStatus status;
 
-	@Column(name="price_perHour")
-	private Integer pricePerHour;
-	@Column(name = "no_of_seats")
-	private Integer noOfSeats;
-	
+	@Column(name = "discount_price")
+	private double discount_price;
+
+	@Column(name = "original_price")
+	private double original_price;
+
+	@Column(name = "seats")
+	private Integer seats;
+
+	@Column(name = "car_type")
+	private String carType;
+
 	@Column(name = "start_time")
 	private LocalDateTime startDateTime;
-	
+
 	@Column(name = "end_time")
 	private LocalDateTime endDateTime;
+
 	@JsonIgnore
-	@OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
-	private List<Booking> bookings;
+	@OneToMany(mappedBy = "carId", cascade = CascadeType.ALL)
+	private List<Booking> booking;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	private User user;
-
 }

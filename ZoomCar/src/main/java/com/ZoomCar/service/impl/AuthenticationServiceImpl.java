@@ -24,6 +24,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+
     @Override
     public ResponseEntity<?> register(RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isEmpty()) {
@@ -40,9 +41,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return ResponseEntity.status(HttpStatus.OK).body(AuthenticationResponse.builder()
                     .token(jwt)
                     .build());
-        }
-        else return ResponseEntity.status(HttpStatus.OK).body("Email already exists!");
+        } else return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email already exists!");
     }
+
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
@@ -53,10 +54,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         ); // user is authenticated
 
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        if (user.getIsBlocked().equals("No")) {
             var jwt = jwtService.generateToken(user);
             return AuthenticationResponse.builder()
                     .token(jwt)
                     .build();
         }
+        return AuthenticationResponse.builder().token(null).build();
     }
+}
 

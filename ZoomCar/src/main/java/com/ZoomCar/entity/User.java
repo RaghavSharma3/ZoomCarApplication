@@ -65,9 +65,6 @@ public class User implements UserDetails {
 			columnDefinition = "varchar(255) default 'No'"
 	)
 	private String isBlocked;
-	@JsonIgnore
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<Booking> bookings = new ArrayList<>();
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

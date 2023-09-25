@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/zoom_car
+    url: jdbc:mysql://zoomcardb.cawtjgg5q64o.ap-south-1.rds.amazonaws.com/zoom_car
     username: root
-    password: root
+    password: 12345678
   jpa:
     hibernate.ddl-auto: update
     generate-ddl: true
@@ -24,3 +24,7 @@ application:
     openapi:
       dev-url: http://localhost:8085
       prod-url: https://bezkoder-api.com
+
+
+
+

@@ -10,16 +10,21 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class UpdateCarPayload {
 
-    private Integer carId;
     private String name;
-    private String model;
-    private Integer year;
+    private Integer carId;
+    private String image;
     private String transmissionType;
     private String fuelType;
+    private String ratings;
+    private String address;
     private Double distanceTravelled;
-    private CarStatus status;
     private Integer noOfSeats;
+    private String carType;
+    private double discountPrice;
+    private double originalPrice;
+    private Integer userId;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
+    private CarStatus status;
 
 }
