@@ -1,0 +1,73 @@
+{
+  "NewCar": [
+    {
+      "image": null,
+      "name": "Renault Duster",
+      "transmission": "Manual",
+      "fuel": "Diesel",
+      "seats": "5 seats",
+      "ratings": "0.00 (0)",
+      "kms": "60k kms driven",
+      "address": "7.5 km T Block, 4th T Block East, 4th Block, Jayanagar, Bengaluru, Karnataka 560041, India",
+      "discount_price": 4297.5,
+      "original_price": "4775",
+      "id": 1
+    },
+    {
+      "image": null,
+      "name": "Tata Nexon",
+      "transmission": "Manual",
+      "fuel": "petrol",
+      "seats": "5 seats",
+      "ratings": "0.00 (0)",
+      "kms": "53k kms driven",
+      "address": "2.1 km BDA Shopping Complex, Austin Town, Neelasandra, Bengaluru, Karnataka 560047, India",
+      "discount_price": 3755.7,
+      "original_price": "4173",
+      "id": 2
+    },
+    {
+      "image": "https://firebasestorage.googleapis.com/v0/b/zoomcar-clone-ba841.appspot.com/o/images%2Fcar5.png867701fa-1422-4ccb-b04d-2af31740d115?alt=media&token=2d22741b-7653-43e8-85e2-4d4d0e15219f",
+      "name": "Tata Nexon",
+      "transmission": "Manual",
+      "fuel": "petrol",
+      "seats": "4 seats",
+      "car_type": "",
+      "ratings": "0.00 (0)",
+      "kms": "45k kms driven",
+      "address": "2.1 km BDA Shopping Complex, Austin Town, Neelasandra, Bengaluru, Karnataka 560047, India",
+      "discount_price": 7102.8,
+      "original_price": "7892",
+      "id": 3
+    },
+    {
+      "name": "Jayesh Srivastava",
+      "transmission": "Manual",
+      "fuel": "Diesel",
+      "seats": "7 seats",
+      "ratings": 0,
+      "kms": "2123k kms driven",
+      "address": "pis.com/v0/b/zoomcar-clone-ba841.appspot.com/o/im",
+      "discount_price": 1908.9,
+      "original_price": "2121",
+      "image": "https://firebasestorage.googleapis.com/v0/b/zoomcar-clone-ba841.appspot.com/o/images%2Fcar7.png48e3a2a8-4e81-4dbe-84c9-1c4aa716f1b2?alt=media&token=25748408-039f-4bbf-b4b4-248a7e1dce0f",
+      "car_type": "suv",
+      "id": 4
+    },
+    {
+      "name": "jj",
+      "transmission": "Manual",
+      "fuel": "Diesel",
+      "seats": "7 seats",
+      "ratings": 0,
+      "kms": "20k kms driven",
+      "address": "Swal.fire({",
+      "discount_price": 4632.3,
+      "original_price": "5147",
+      "image": "https://firebasestorage.googleapis.com/v0/b/zoomcar-clone-ba841.appspot.com/o/images%2Fcar1.pngbef0f214-dc06-41be-9289-5d8d168d62c5?alt=media&token=1d2782c9-a4d4-4c58-8655-67eb8194afbc",
+      "car_type": "sedan",
+      "id": 5
+    }
+  ],
+  "ImageUrl": []
+}
